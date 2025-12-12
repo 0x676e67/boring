@@ -227,6 +227,10 @@ jobs:
     - name: Set Android Linker path
       if: endsWith(matrix.thing, '-android')
       run: echo "CARGO_TARGET_$(echo ${{ matrix.target }} | tr \\-a-z _A-Z)_LINKER=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/$(echo ${{ matrix.target }} | sed s/armv7/armv7a/)21-clang++" >> "$GITHUB_ENV"
+
+    - name: Pin some dependencies
+      run: |
+        cargo update --package cmake --precise 0.1.54
     - name: Build tests
       # We `build` because we want the linker to verify we are cross-compiling correctly for check-only targets.
       run: cargo build --target ${{ matrix.target }} --tests ${{ matrix.extra_test_args }}
